@@ -1,0 +1,211 @@
+#include <iostream>
+
+#include <string>
+
+using namespace std;
+
+int main() {
+
+	string str;
+
+	string temp = ""; 
+
+	double sum = 0; 
+
+	int position_for_e = 0, 
+
+	int exp_exist = 0;
+
+	int counter = 0, 
+
+	int minuses = 0; 
+
+	bool minus = 0;
+
+	bool MINUS = 0, 
+
+	bool exit = 0, 
+
+	bool this_answer = 0;
+
+	cin >> str;
+	
+	str[i+1];
+
+	for (short i = 0; (!(isdigit(str[i]))); i += 1) {
+
+		if (str[i] == '\0') break;
+
+		position_for_e += 1;
+	}
+
+	if (position_for_e >= str.size())
+		cout << 0; return (0); 
+
+	for (short i = position_for_e; str[i + 1] != '\0'; i += 1)
+	
+		if (str[i] == 'e' || str[i] == 'E')
+			++exp_exist;
+	
+	for (short i = 0; str[i] != '\0'; i += 1) {
+	
+		if (isdigit(str[i])) {
+	
+			++counter;
+	
+			MINUS = 0;
+	
+			if (i - counter >= 0 && str[i - counter] == '-') {
+	
+				int y = i - 1;
+	
+				while (str[y] == '-') {
+	
+					++minuses;
+	
+					--y;
+	
+					if (y == 0) 
+						break;
+				}
+
+				if (minuses % 2) MINUS = 1;
+				
+				else MINUS = 0;
+			}
+
+			if (exp_exist) {
+				
+				minus = 0;
+
+				string mantisa = "", 
+
+				pow10 = ""; 
+
+				double exponenta = 1;
+				
+				int k = i;
+				
+				while (str[i] != 'e' || str[i] != 'E') {
+
+					if (!(isdigit(str[i]))) { 
+
+						exit = 1; 
+
+						break; 
+				}
+					mantisa += str[i]; ++i;
+				}
+				
+				if (str[i] == 'e' || str[i] == 'E') 
+					exit = 0;
+				
+				if (exit) {
+				
+					double a = atof(mantisa.c_str());
+				
+					if (MINUS) a = -a;
+				
+					i = k;
+				
+					sum += a;
+				
+					continue;
+				}
+				
+				if (str[i] != '\0' && isdigit(str[i + 1])) {
+
+					i += 1;
+
+					while (isdigit(str[i])) { 
+
+						pow10 += str[i];
+
+						i += 1; 
+					}
+
+					exponenta = pow(10, atof(pow10.c_str()));
+				}
+
+				else if (str[i] != '\0' && (str[i + 1] == '-' || str[i + 1] == '+')) {
+
+					if (str[i + 1] == '-') 
+
+						minus = 1;
+
+					i += 2;
+
+					while (isdigit(str[i])) { 
+
+						pow10 += str[i]; 
+
+						i += 1;
+						
+						if (str[i] == '\0') 
+
+							break; 
+					}
+
+					double e = atof(pow10.c_str());
+
+					if (minus) 
+						e = -e;
+					
+					exponenta = pow(10, e);
+				}
+
+				double a = atof(mantisa.c_str()) * exponenta;
+
+				if (MINUS) a = -a;
+
+				sum += a;
+
+				exp_exist -= 1;
+
+				if (str[i - 1] == '\0' && MINUS) 
+
+					{ sum -= atof(temp.c_str()); 
+
+						break; }
+				i -= 1;
+
+				continue;
+
+			}
+
+			temp += str[i];
+		}
+		else {
+			if (MINUS) sum -= atof(temp.c_str());
+
+			else 
+
+				sum += atof(temp.c_str());
+
+			temp = ""; 
+
+			counter = 0;  
+
+			continue;
+		}
+
+		if (str[i + 1] == '\0' && MINUS) {
+
+			sum -= atof(temp.c_str());
+
+			this_answer = 1; 
+
+		}
+
+	}
+
+	if (this_answer) { 
+
+		cout << sum; return (0); 
+
+	}
+
+	cout << sum + atof(temp.c_str());
+
+	return (0);
+}

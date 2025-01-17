@@ -1,0 +1,274 @@
+#include <iostream>
+#include <fstream>
+#include <Windows.h>
+#include <string>
+using namespace std;
+
+struct Reys {
+	int number;        //номер рейса
+	char* type;        //тип самолёта
+	char* time;       //время вылета
+	char* point;       //пункт назначения
+	int id;
+};
+
+ofstream fout;
+ifstream fin;
+
+int check_value()
+{
+	int x;
+
+	while (true) {
+		std::cin >> x;
+		if (std::cin.fail()) {
+			std::cout << "Error!!! Please, try again.\n";
+			std::cin.clear();
+			std::cin.ignore(32768, '\n');
+			continue;
+		}
+		break;
+	}
+
+	return x;
+
+}
+
+char* time_in()
+{
+	char* h = (char*)calloc(9, sizeof(char));
+	cin.getline(h, 9);
+	char* hh = (char*)calloc(3, sizeof(char));
+	hh[0] = h[0];
+	hh[1] = h[1];
+
+	char* mm = (char*)calloc(3, sizeof(char));
+	mm[0] = h[3];
+	mm[1] = h[4];
+	char* ss = (char*)calloc(3, sizeof(char));
+
+	if (atoi(hh) >= 24 && atoi(mm) > 60 && atoi(ss) > 60 && h[2]==':' && h[5]==':' && h[9] == 52)
+	{
+		cout << "Неверный ввод, введите заново!\n";
+		free(hh);
+		free(mm);
+		free(ss);
+		free(h);
+		return time_in();
+	}
+	else {
+		free(hh);
+		free(mm);
+		free(ss);
+		return h;
+	}
+}
+int menu()
+{
+	char ch;
+	std::cout << '\n';
+	do {
+		std::cout << "(E) nter\n";        // Ввести новый элемент
+		std::cout << "(D) isplay\n";      // Отобразить 
+		std::cout << "(S) ort (time) \n";         // Сортировать
+		std::cout << "(R) emove\n";       // Удалить элемент
+		std::cout << "(Q) uit\n";         // Выйти из программы
+		std::cout << "Choose a comand: ";
+
+		std::cin >> ch;
+
+	} while (!strchr("edsrq", tolower(ch)));
+
+	return tolower(ch);
+}
+
+void enter(Reys*& fly, int& length)
+{
+	int n;
+	cout << "Введите количество элементов, которoе хотите добавить.\n";
+	cin >> n;
+
+	for (int i = length; i < length + n; i++)
+	{
+		cout << "Номер рейса: ";
+		//cin >>fly[i].number;
+		//cin.ignore(33000, '\n');
+		fly[i].number = check_value();
+		cin.ignore(33000, '\n');
+
+
+		cout << "Тип самолета: ";
+		fly[i].type = (char*)calloc(50, sizeof(char));
+		cin.getline(fly[i].type, 50);
+
+
+
+		cout << "Время вылета(чч:мм:сс): ";
+		fly[i].time = time_in();
+
+
+
+		cout << "Точка назначения: ";
+		fly[i] .point = (char*)calloc(50, sizeof(char));
+		cin.getline(fly[i].point, 50);
+
+
+
+		cout << '\n';
+		fly[i].id = i;
+	}
+	length += n;
+}
+
+void display(Reys*& fly, int& length)
+{
+	for (int i = 0; i < length; i++)
+	{
+		cout << i + 1 << ")\n";
+		cout << "Номер рейса: ";
+		cout << fly[i].number << '\n';
+
+		cout << "Тип самолета: ";
+		cout << fly[i].type << '\n';
+
+
+		cout << "Время вылета: ";
+		cout<< fly[i].time << '\n';
+
+
+		cout << "Точка назначения: ";
+		cout<< fly[i].point << '\n';
+		
+		cout << '\n';
+	}
+}
+
+void sort(Reys fly[], int& length)
+{
+	/*char* t = (char*)calloc(length, sizeof(char));
+	for (int a = 1; a < length; a++)
+		for (int b = length - 1; b >= a; b--) {
+			if (atoi(fly[b - 1].time) > atoi(fly[b].time)) {
+				t = fly[b - 1].time;
+				fly[b - 1].time = fly[b].time;
+				fly[b].time = t;
+			}
+		}*/
+	
+	for (int a = 1; a < length; a++)
+		for (int b = length - 1; b >= a; b--) {
+			if (atoi(fly[b - 1].time) > atoi(fly[b].time)) {
+				Reys tmp = fly[b - 1];
+				fly[b - 1] = fly[b];
+				fly[b] = tmp;
+
+
+			}
+		}
+
+	std::cout << "\nСортировка успешно выполнена.\n";
+}
+
+void show(Reys*& fly, int& length)
+{
+	fout.open("fileresult.txt");
+
+	for (int i = 0; i < length; i++)
+	{
+		fout << i + 1 << ")\n";
+		fout << "Номер рейса: ";
+		fout << fly[i].number << '\n';
+
+		fout << "Тип самолета: ";
+		fout << fly[i].type << '\n';
+
+
+		fout << "Время вылета: ";
+		fout << fly[i].time << '\n';
+
+
+		fout << "Точка назначения: ";
+		fout << fly[i].point << '\n';
+
+		fout << '\n';
+	}
+}
+
+
+void remoVE(Reys*& Obj, int& amount)
+{
+	int num, YesOrNot;
+
+
+	do {
+		display(Obj, amount);
+		std::cout << "\nВыберите номер записи, которую хотите удалить: ";
+		std::cin >> num;
+		--num;
+		std::cin.get();
+		for (int j = num; j < amount; j++)
+		{
+			Obj[j] = Obj[j + 1];
+		}
+		amount--;
+		display(Obj, amount);
+		std::cout << "Вы хотите продолжить удаление?(1-да, 0-нет): ";
+		std::cin >> YesOrNot;
+		std::cin.get();
+	} while (YesOrNot == 1);
+
+}
+
+int main()
+{
+	setlocale(LC_ALL, "rus");
+	
+	
+	cout << "Добро пожаловать в программу рейсов самолетов!";
+	
+
+	int numb;
+	
+	fin.open("file.txt");
+	fin >> numb;
+
+
+	int length = numb;
+
+	Reys* fly = (Reys*)calloc(numb, sizeof(int)+sizeof(char)*50+sizeof(double)+sizeof(char)*50+sizeof(int));
+	
+	for (int i = 0; i < length; i++)
+	{
+		fin>>fly[i].number;
+		fin.ignore(33000, '\n');
+
+		fly[i].time = (char*)calloc(9, sizeof(char));
+		fin.getline(fly[i].time, 9);
+
+		fly[i].type = (char*)calloc(30, sizeof(char));
+		fin.getline(fly[i].type, 30);
+
+		fly[i].point = (char*)calloc(30, sizeof(char));
+		fin.getline(fly[i].point, 30);
+
+		fly[i].id = i;
+	}
+
+
+	char choice;
+	while (1) {
+		choice = menu();
+		switch (choice) {
+		case 'e': enter(fly,length);
+			break;
+		case 'd': display(fly, length);
+			break;
+		case 's': sort(fly,length);
+			break;
+		case 'r': remoVE(fly, length);
+			break;
+		case 'q': show(fly, length);  free(fly); return 0;
+		}
+
+	}
+}

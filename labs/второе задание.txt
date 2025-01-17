@@ -1,0 +1,16 @@
+3
+
+1
+boing
+22.34
+Minsk
+
+2
+passandger
+10.37
+Moscow
+
+3
+gruz
+5.04
+Kiev

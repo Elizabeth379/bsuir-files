@@ -1,0 +1,27 @@
+TOMB
+Task: building
+Worker: egyptian
+Head: Pharaoh
+Date of issue: 25.03.1010
+Target date: month
+
+CASTLE
+Task: stained glass window
+Worker: Guard
+Head: King
+Date of issue: 11.12.1301
+Target date: year
+
+SHIP
+Task: sails and masts
+Worker: pirate
+Head: Captain
+Date of issue: 30.06.1633
+Target date: two weeks
+
+HAND
+Task: To make a prosthesis
+Worker: the lowly Tarnished
+Head: Millicent
+Date of issue: 12.12.1212
+Target date: two weeks
